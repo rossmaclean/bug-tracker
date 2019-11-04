@@ -1,0 +1,5 @@
+---
+applications:
+- name: bug-tracker
+  memory: 1024M
+  path: target/bug-tracker-0.0.1-SNAPSHOT.jar

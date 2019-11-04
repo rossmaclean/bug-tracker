@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:insert="head"></head>
+
+<body>
+<div th:insert="navbar"></div>
+<div class="container jumbotron">
+    <div style="display: inline;" class="h1">Bugs</div>
+    <i style="float: right;" class="fas fa-plus fa-3x" data-toggle="modal" data-target="#exampleModal"></i>
+    <hr>
+    <div class="row">
+        <div th:each="bug: ${bugs}" class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <form class="card-title" th:action="@{/delete_bug(bugId=${bug.id})}" method="post">
+                        <h5 class="card-title" style="display: inline" th:text="${bug.title}"></h5>
+                        <button style="float: right;" class="btn" type="submit">
+                            <i class="far fa-trash-alt"></i>
+                        </button>
+                    </form>
+                    <hr>
+                    <p class="card-text font-weight-bold">Priority</p>
+                    <p class="card-text" th:text="${bug.priority}"></p>
+
+                    <p class="card-text font-weight-bold">Assigned Developer</p>
+                    <p class="card-text" th:text="${bug.assignedDeveloper}"></p>
+
+                    <p class="card-text font-weight-bold">Found On</p>
+                    <p class="card-text" th:text="${bug.creationDate}"></p>
+
+                    <a class="btn btn-info" th:href="@{'/bugs/' + ${bug.id}}">More</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Bug Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">New Bug</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/create_bug}" method="post">
+                        <div class="form-group">
+                            <input type="text" id="title" name="title" class="form-control" autofocus="autofocus"
+                                   placeholder="Title" required>
+                        </div>
+                        <div class="form-group">
+                            <textarea id="description" name="description" class="form-control"
+                                      placeholder="Description" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="author" name="finderName" class="form-control" placeholder="Finder" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="assignedDeveloper" name="assignedDeveloper" class="form-control"
+                                   placeholder="Assigned Developer" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="priority">Priority</label>
+                            <select class="form-control" id="priority" name="priority" required>
+                                <option th:each="priorityOpt : ${T(com.ross.bugtracker.model.Priority).values()}"
+                                        th:value="${priorityOpt}" th:text="${priorityOpt}"></option>
+                            </select>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Create Bug</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript" th:src="@{webjars/bootstrap/4.2.1/js/bootstrap.min.js}"></script>
+</body>
+</html>

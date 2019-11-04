@@ -1,0 +1,18 @@
+<nav class="navbar navbar-expand-sm navbar-light bg-light container" th:fragment="navbar" xmlns:th="http://www.w3.org/1999/xhtml">
+    <a class="navbar-brand" th:href="@{/}">
+        <img th:src="@{/images/ladybird.svg}" width="30" height="30" class="d-inline-block align-top"/>
+        Bug Tracker
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav" th:with="view=${#httpServletRequest.getServletPath()}">
+            <a class="nav-item nav-link" th:classappend="${#strings.equals(view,'/')? 'active' : ''}" th:href="@{/}">Home</a>
+            <a class="nav-item nav-link" th:classappend="${#strings.startsWith(view,'/login')? 'active' : ''}" th:if="${#request.userPrincipal == null}" th:href="@{/login}">Login</a>
+            <a class="nav-item nav-link" th:classappend="${#strings.startsWith(view,'/bug')? 'active' : ''}" th:if="${#request.userPrincipal != null}" th:href="@{/bugs}">Bugs</a>
+            <a class="nav-item nav-link" th:classappend="${#strings.startsWith(view,'/register')? 'active' : ''}" th:if="${#request.userPrincipal == null}" th:href="@{/register}">Register</a>
+            <a class="nav-item nav-link" th:classappend="${#strings.startsWith(view,'/logout')? 'active' : ''}" th:if="${#request.userPrincipal != null}" th:href="@{/logout}">Logout</a>
+        </div>
+    </div>
+</nav>

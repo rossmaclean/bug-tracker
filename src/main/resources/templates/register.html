@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="head"></head>
+
+<body>
+<div th:insert="navbar"></div>
+<div class="container jumbotron">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="h1">Register</div>
+            <form th:action="@{/register_check}" method="post">
+                <div th:if="${param.error}">
+                    <div class="alert alert-danger">
+                        Invalid username or password.
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="username">Username</label>:
+                    <input type="text"
+                           id="username"
+                           name="username"
+                           class="form-control"
+                           autofocus="autofocus"
+                           placeholder="Username" required>
+                </div>
+                <div class="form-group">
+                    <label for="fullname">Full Name</label>:
+                    <input type="text"
+                           id="fullname"
+                           name="fullname"
+                           class="form-control"
+                           autofocus="autofocus"
+                           placeholder="Full Name" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>:
+                    <input type="password"
+                           id="password"
+                           name="password"
+                           class="form-control"
+                           placeholder="Password" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>:
+                    <input type="password"
+                           id="confirmPassword"
+                           name="confirmPassword"
+                           class="form-control"
+                           placeholder="Confirm Password" required>
+                </div>
+                <div class="form-group">
+                    <div class="row justify-content-end">
+                        <div class="col-sm-4">
+                            <input type="submit"
+                                   name="register-submit"
+                                   id="register-submit"
+                                   class="form-control btn btn-primary"
+                                   value="Register">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

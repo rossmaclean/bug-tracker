@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="head"></head>
+
+<body>
+<div th:insert="navbar"></div>
+<div class="container jumbotron">
+    <div style="display: inline;" class="h1">Bug</div>
+    <hr>
+    <div class="card">
+        <div class="card-body">
+            <h3 class="card-title" th:text="${bug.title}"></h3>
+            <hr>
+            <p class="card-text font-weight-bold">Description</p>
+            <p class="card-text" th:text="${bug.description}"></p>
+
+            <p class="card-text font-weight-bold">Priority</p>
+            <p class="card-text" th:text="${bug.priority}"></p>
+
+            <form method="post" th:action="@{/update_status(bugId=${bug.id})}">
+                    <div style="width: 120px;">
+                        <label class="card-text font-weight-bold" for="status">Status</label>
+                        <select class="form-control" id="status" name="status" onchange="this.form.submit()" th:field="*{bug.status}">
+                            <option th:each="statOpt : ${T(com.ross.bugtracker.model.Status).values()}"
+                                    th:value="${statOpt}" th:text="${statOpt}"></option>
+                        </select>
+                </div>
+            </form>
+
+
+            <p class="card-text font-weight-bold">Found By</p>
+            <p class="card-text" th:text="${bug.finderName}"></p>
+
+            <p class="card-text font-weight-bold">Assigned Developer</p>
+            <p class="card-text" th:text="${bug.assignedDeveloper}"></p>
+
+            <p class="card-text font-weight-bold">Found On</p>
+            <p class="card-text" th:text="${bug.creationDate}"></p>
+            <hr>
+            <h5 style="display: inline;" class="card-text">Comments</h5>
+            <i style="float: right;" class="fas fa-plus fa-2x" data-toggle="modal" data-target="#addCommentModal"></i>
+
+            <div th:each="comment: ${bug.comments}">
+                <p class="font-weight-bold"><span th:text="${comment.author}"></span> - <span
+                        th:text="${comment.creationDate}"></span></p>
+                <p th:text="${comment.comment}"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Comment Modal -->
+<div class="modal fade" id="addCommentModal" tabindex="-1" role="dialog" aria-labelledby="addCommentModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Comment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/add_comment(bugId=${bug.id})}" method="post">
+                    <div class="form-group">
+                            <textarea id="comment" name="comment" class="form-control"
+                                      placeholder="Comment" required></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add Comment</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
