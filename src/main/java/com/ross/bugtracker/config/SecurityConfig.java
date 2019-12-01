@@ -30,9 +30,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
 
         http.authorizeRequests().antMatchers("/", "/login", "/logout", "/error").permitAll();
-        http.authorizeRequests().antMatchers("/delete_bug").authenticated();
-        http.authorizeRequests().antMatchers("/update_status").access("hasAnyRole('ROLE_DEVELOPERR')");
-        http.authorizeRequests().antMatchers("/add_comment").access("hasAuthority('ROLE_DEVELOPER')");
+        http.authorizeRequests().antMatchers("/delete_bug").access("hasAuthority('ROLE_DEVELOPER')");
+        http.authorizeRequests().antMatchers("/update_status").access("hasAnyAuthority('ROLE_DEVELOPER', 'ROLE_TESTER')");
+        http.authorizeRequests().antMatchers("/add_comment").access("hasAnyAuthority('ROLE_DEVELOPER', 'ROLE_TESTER')");
+
         http.authorizeRequests().antMatchers("/bugs").authenticated();
 
         http.authorizeRequests().and().formLogin()

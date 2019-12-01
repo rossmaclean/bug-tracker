@@ -29,8 +29,8 @@ public class BugService {
     @PostConstruct
     public void createBugs() {
         bugRepository.deleteAll();
-        bugRepository.save(Bug.builder().assignedDeveloper("Bob Jones").title("Phasellus facilisis dapibus iaculis.").priority(Priority.HIGH).finderName("John Jackson").description("Quisque lacinia pellentesque libero, in condimentum enim. Proin pellentesque neque at massa fringilla, ac dapibus lorem pulvinar. Ut lobortis volutpat est id posuere. Quisque eleifend odio quis malesuada facilisis. Suspendisse placerat, velit eu rutrum accumsan, urna turpis tempus dolor, ac lobortis lectus dolor ut tortor. Proin ac egestas nibh. Nam non felis quis mauris lobortis sagittis vel vel enim.").build());
-        bugRepository.save(Bug.builder().assignedDeveloper("Jane Doe").title("Suspendisse at lorem id orci commodo tincidunt.").priority(Priority.MEDIUM).finderName("James Dyson").description("Quisque lacinia pellentesque libero, in condimentum enim. Proin pellentesque neque at massa fringilla, ac dapibus lorem pulvinar. Ut lobortis volutpat est id posuere. Quisque eleifend odio quis malesuada facilisis. Suspendisse placerat, velit eu rutrum accumsan, urna turpis tempus dolor, ac lobortis lectus dolor ut tortor. Proin ac egestas nibh. Nam non felis quis mauris lobortis sagittis vel vel enim.").build());
+        bugRepository.save(Bug.builder().type(TicketType.DEVELOPMENT).assignedDeveloper("Bob Jones").title("Phasellus facilisis dapibus iaculis.").priority(Priority.HIGH).finderName("John Jackson").description("Quisque lacinia pellentesque libero, in condimentum enim. Proin pellentesque neque at massa fringilla, ac dapibus lorem pulvinar. Ut lobortis volutpat est id posuere. Quisque eleifend odio quis malesuada facilisis. Suspendisse placerat, velit eu rutrum accumsan, urna turpis tempus dolor, ac lobortis lectus dolor ut tortor. Proin ac egestas nibh. Nam non felis quis mauris lobortis sagittis vel vel enim.").build());
+        bugRepository.save(Bug.builder().type(TicketType.PRODUCTION).assignedDeveloper("Jane Doe").title("Suspendisse at lorem id orci commodo tincidunt.").priority(Priority.MEDIUM).finderName("James Dyson").description("Quisque lacinia pellentesque libero, in condimentum enim. Proin pellentesque neque at massa fringilla, ac dapibus lorem pulvinar. Ut lobortis volutpat est id posuere. Quisque eleifend odio quis malesuada facilisis. Suspendisse placerat, velit eu rutrum accumsan, urna turpis tempus dolor, ac lobortis lectus dolor ut tortor. Proin ac egestas nibh. Nam non felis quis mauris lobortis sagittis vel vel enim.").build());
 
         Bug bug = Bug.builder().title("Quisque eleifend rhoncus ipsum.").priority(Priority.LOW).finderName("Bob Thomson").assignedDeveloper("John Smith").description("Quisque lacinia pellentesque libero, in condimentum enim. Proin pellentesque neque at massa fringilla, ac dapibus lorem pulvinar. Ut lobortis volutpat est id posuere. Quisque eleifend odio quis malesuada facilisis. Suspendisse placerat, velit eu rutrum accumsan, urna turpis tempus dolor, ac lobortis lectus dolor ut tortor. Proin ac egestas nibh. Nam non felis quis mauris lobortis sagittis vel vel enim.").build();
         Comment comment = Comment.builder().author("Ross MacLean").comment("This is a good story, I like it.").creationDate(Date.from(Instant.now())).build();
@@ -39,7 +39,6 @@ public class BugService {
         bugRepository.save(bug);
 
         userDetailsRepository.deleteAll();
-//
-        userDetailsRepository.save(UserDetails.builder().fullName("Ross Mac").userName("ross").encryptedPassword(passwordEncoder.encode("pass")).role(Role.ROLE_ADMIN).build());
+        userDetailsRepository.save(UserDetails.builder().fullName("Ross Mac").userName("ross").encryptedPassword(passwordEncoder.encode("pass")).role(Role.ROLE_DEVELOPER).build());
     }
 }

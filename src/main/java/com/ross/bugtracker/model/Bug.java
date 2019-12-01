@@ -27,6 +27,7 @@ public class Bug {
     private String assignedDeveloper;
     private Priority priority;
     private Status status = Status.OPEN;
+    private TicketType type;
     private String description;
     private List<Comment> comments = new ArrayList<>();
 }

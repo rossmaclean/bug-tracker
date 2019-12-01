@@ -69,8 +69,16 @@
                                 <option th:each="priorityOpt : ${T(com.ross.bugtracker.model.Priority).values()}"
                                         th:value="${priorityOpt}" th:text="${priorityOpt}"></option>
                             </select>
-
                         </div>
+
+                        <div class="form-group">
+                            <label for="type">Type</label>
+                            <select class="form-control" id="type" name="type" required>
+                                <option th:each="type : ${T(com.ross.bugtracker.model.TicketType).values()}"
+                                        th:value="${type}" th:text="${type}"></option>
+                            </select>
+                        </div>
+
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-primary">Create Bug</button>

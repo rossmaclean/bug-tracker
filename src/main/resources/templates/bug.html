@@ -17,6 +17,9 @@
             <p class="card-text font-weight-bold">Priority</p>
             <p class="card-text" th:text="${bug.priority}"></p>
 
+            <p class="card-text font-weight-bold">Type</p>
+            <p class="card-text" th:text="${bug.type}"></p>
+
             <span th:if="${!#request.isUserInRole('ROLE_DEVELOPER')}">
                 <p class="card-text font-weight-bold">Status</p>
             <p class="card-text" th:text="${bug.status}"></p>

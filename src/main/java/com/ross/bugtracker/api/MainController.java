@@ -69,25 +69,19 @@ public class MainController {
     }
 
     @RequestMapping(value = "/bugs/{id}", method = RequestMethod.GET)
-    public String bugaPage(@PathVariable("id") String bugId, Model model, Principal principal) {
-        model.addAttribute("bug", bugRepository.findById(bugId.toString()).get());
-        return "bug";
-    }
-
-    @RequestMapping(value = "/create_bug", method = RequestMethod.POST)
-    public String createBug(@ModelAttribute("bug") Bug bug, Model model, Principal principal) {
-        bugRepository.save(bug);
-        return "redirect:/bugs";
-    }
-
-    @RequestMapping(value = "/bug", method = RequestMethod.GET)
-    public String bugPage(@RequestParam("bugId") String bugId, Model model, Principal principal) {
+    public String bugPage(@PathVariable("id") String bugId, Model model) {
         model.addAttribute("bug", bugRepository.findById(bugId).get());
         return "bug";
     }
 
+    @RequestMapping(value = "/create_bug", method = RequestMethod.POST)
+    public String createBug(@ModelAttribute("bug") Bug bug) {
+        bugRepository.save(bug);
+        return "redirect:/bugs";
+    }
+
     @RequestMapping(value = "/delete_bug", method = RequestMethod.POST)
-    public String createBug(@RequestParam("bugId") String bugId, Model model, Principal principal) {
+    public String createBug(@RequestParam("bugId") String bugId) {
         bugRepository.deleteById(bugId);
         return "redirect:/bugs";
     }
@@ -106,7 +100,7 @@ public class MainController {
     }
 
     @RequestMapping(value = "/update_status", method = RequestMethod.POST)
-    public String updateStatus(@RequestParam("bugId") String bugId, @ModelAttribute("status") Status status, Model model, Principal principal) {
+    public String updateStatus(@RequestParam("bugId") String bugId, @ModelAttribute("status") Status status) {
         System.out.println("Updating status for " + bugId + " to " + status.name());
         Bug bug = bugRepository.findById(bugId).get();
         bug.setStatus(status);

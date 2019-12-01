@@ -3,6 +3,7 @@ package com.ross.bugtracker.service;
 import com.ross.bugtracker.model.Role;
 import com.ross.bugtracker.model.UserDetails;
 import com.ross.bugtracker.repository.UserDetailsRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -17,13 +18,17 @@ import java.util.Arrays;
 import java.util.Optional;
 
 @Component
+@Slf4j
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
-    @Autowired
     private UserDetailsRepository userDetailsRepository;
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    public CustomAuthenticationProvider(UserDetailsRepository userDetailsRepository, BCryptPasswordEncoder passwordEncoder) {
+        this.userDetailsRepository = userDetailsRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -32,10 +37,12 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         Optional<UserDetails> user = userDetailsRepository.findById(userName);
         if (user.isPresent() && passwordEncoder.matches(password, user.get().getEncryptedPassword())) {
+            log.info("User {} successfully logged in", authentication);
             return new UsernamePasswordAuthenticationToken(
                     userName, password, Arrays.asList(new SimpleGrantedAuthority(user.get().getRole().name()))
             );
         }
+        log.warn("User tried unsuccessfully to log in with data: {}", authentication);
         throw new AuthenticationCredentialsNotFoundException("");
     }
 
