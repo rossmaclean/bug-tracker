@@ -8,6 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -27,5 +28,5 @@ public class Bug {
     private Priority priority;
     private Status status = Status.OPEN;
     private String description;
-    private List<Comment> comments;
+    private List<Comment> comments = new ArrayList<>();
 }

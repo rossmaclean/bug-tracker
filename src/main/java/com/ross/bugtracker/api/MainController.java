@@ -5,11 +5,9 @@ import com.ross.bugtracker.model.Comment;
 import com.ross.bugtracker.model.Status;
 import com.ross.bugtracker.model.UserRegistrationModel;
 import com.ross.bugtracker.repository.BugRepository;
-import com.ross.bugtracker.repository.UserCredentialRepository;
-import com.ross.bugtracker.service.BugService;
+import com.ross.bugtracker.repository.UserDetailsRepository;
 import com.ross.bugtracker.service.CustomAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,16 +15,20 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.sql.Date;
 import java.time.Instant;
-import java.util.UUID;
 
 @Controller
 public class MainController {
 
-    @Autowired
-    private CustomAuthenticationProvider customAuthenticationProvider;
+    private final CustomAuthenticationProvider customAuthenticationProvider;
+    private final BugRepository bugRepository;
+    private final UserDetailsRepository userDetailsRepository;
 
     @Autowired
-    private BugRepository bugRepository;
+    public MainController(CustomAuthenticationProvider customAuthenticationProvider, BugRepository bugRepository, UserDetailsRepository userDetailsRepository) {
+        this.customAuthenticationProvider = customAuthenticationProvider;
+        this.bugRepository = bugRepository;
+        this.userDetailsRepository = userDetailsRepository;
+    }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String homePage(Model model) {
@@ -51,15 +53,13 @@ public class MainController {
     @RequestMapping(value = "/register_check", method = RequestMethod.POST)
     public String registerCheckPage(@ModelAttribute("user") UserRegistrationModel user, Model model) {
         if (user.getPassword().equals(user.getConfirmPassword())) {
-            customAuthenticationProvider.register(user.getUsername(), user.getFullname(), user.getPassword());
+            customAuthenticationProvider.register(user.getUsername(), user.getFullname(), user.getRole(), user.getPassword());
+            model.addAttribute("success", true);
             return "register";
         }
         model.addAttribute("error", true);
         return "register";
     }
-
-    @Autowired
-    private BugService bugService;
 
     @RequestMapping(value = "/bugs", method = RequestMethod.GET)
     public String bugsPage(Model model, Principal principal) {
@@ -92,14 +92,11 @@ public class MainController {
         return "redirect:/bugs";
     }
 
-    @Autowired
-    private UserCredentialRepository userCredentialRepository;
-
     @RequestMapping(value = "/add_comment", method = RequestMethod.POST)
     public String addComment(@RequestParam("bugId") String bugId, @ModelAttribute("comment") Comment comment, Principal principal) {
         Bug bug = bugRepository.findById(bugId).get();
         if (bug.getStatus() != Status.CLOSED) {
-            String fullname = userCredentialRepository.findById(principal.getName()).get().getFullName();
+            String fullname = userDetailsRepository.findById(principal.getName()).get().getFullName();
             comment.setAuthor(fullname);
             comment.setCreationDate(Date.from(Instant.now()));
             bug.getComments().add(comment);

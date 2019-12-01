@@ -17,13 +17,20 @@
             <p class="card-text font-weight-bold">Priority</p>
             <p class="card-text" th:text="${bug.priority}"></p>
 
-            <form method="post" th:action="@{/update_status(bugId=${bug.id})}">
-                    <div style="width: 120px;">
-                        <label class="card-text font-weight-bold" for="status">Status</label>
-                        <select class="form-control" id="status" name="status" onchange="this.form.submit()" th:field="*{bug.status}">
-                            <option th:each="statOpt : ${T(com.ross.bugtracker.model.Status).values()}"
-                                    th:value="${statOpt}" th:text="${statOpt}"></option>
-                        </select>
+            <span th:if="${!#request.isUserInRole('ROLE_DEVELOPER')}">
+                <p class="card-text font-weight-bold">Status</p>
+            <p class="card-text" th:text="${bug.status}"></p>
+            </span>
+
+            <form th:if="${#request.isUserInRole('ROLE_DEVELOPER')}" method="post"
+                  th:action="@{/update_status(bugId=${bug.id})}">
+                <div style="width: 120px;">
+                    <label class="card-text font-weight-bold" for="status">Status</label>
+                    <select class="form-control" id="status" name="status" onchange="this.form.submit()"
+                            th:field="*{bug.status}">
+                        <option th:each="statOpt : ${T(com.ross.bugtracker.model.Status).values()}"
+                                th:value="${statOpt}" th:text="${statOpt}"></option>
+                    </select>
                 </div>
             </form>
 
@@ -38,7 +45,10 @@
             <p class="card-text" th:text="${bug.creationDate}"></p>
             <hr>
             <h5 style="display: inline;" class="card-text">Comments</h5>
-            <i style="float: right;" class="fas fa-plus fa-2x" data-toggle="modal" data-target="#addCommentModal"></i>
+            <div th:if="${#request.isUserInRole('ROLE_DEVELOPER')}">
+                <i style="float: right;" class="fas fa-plus fa-2x" data-toggle="modal"
+                   data-target="#addCommentModal"></i>
+            </div>
 
             <div th:each="comment: ${bug.comments}">
                 <p class="font-weight-bold"><span th:text="${comment.author}"></span> - <span

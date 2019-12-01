@@ -1,7 +1,7 @@
 package com.ross.bugtracker.model;
 
 public enum Role {
-    DEFAULT,
-    USER,
-    ADMIN
+    ROLE_DEFAULT,
+    ROLE_DEVELOPER,
+    ROLE_ADMIN
 }

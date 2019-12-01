@@ -28,18 +28,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
-//
-        http.authorizeRequests().antMatchers("/", "/login", "/logout").permitAll();
 
-//        http.authorizeRequests().antMatchers("/css/**"/*, "/js/**", "/img/**", "/error"*/).permitAll();
-
-//                .anyRequest().fullyAuthenticated();
-
-//        http.authorizeRequests().antMatchers("/userInfo").access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')");
-
+        http.authorizeRequests().antMatchers("/", "/login", "/logout", "/error").permitAll();
         http.authorizeRequests().antMatchers("/delete_bug").authenticated();
-        http.authorizeRequests().antMatchers("/update_status").authenticated();
-        http.authorizeRequests().antMatchers("/add_comment").authenticated();
+        http.authorizeRequests().antMatchers("/update_status").access("hasAnyRole('ROLE_DEVELOPERR')");
+        http.authorizeRequests().antMatchers("/add_comment").access("hasAuthority('ROLE_DEVELOPER')");
         http.authorizeRequests().antMatchers("/bugs").authenticated();
 
         http.authorizeRequests().and().formLogin()
@@ -50,7 +43,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("username")
                 .passwordParameter("password")
                 .and().logout().logoutUrl("/logout").logoutSuccessUrl("/login?logout=true");
-        http.authorizeRequests().antMatchers("/css/**").permitAll();
-        http.authorizeRequests().antMatchers("/css/**/*").permitAll();
     }
 }

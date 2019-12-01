@@ -9,4 +9,5 @@ public class UserRegistrationModel {
     private String fullname;
     private String password;
     private String confirmPassword;
+    private Role role;
 }

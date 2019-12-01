@@ -6,7 +6,7 @@ import org.springframework.data.annotation.Id;
 
 @Data
 @Builder
-public class UserCredentials {
+public class UserDetails {
 
     @Id
     private String userName;

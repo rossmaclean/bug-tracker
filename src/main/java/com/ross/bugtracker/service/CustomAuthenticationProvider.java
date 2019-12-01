@@ -1,8 +1,8 @@
 package com.ross.bugtracker.service;
 
 import com.ross.bugtracker.model.Role;
-import com.ross.bugtracker.model.UserCredentials;
-import com.ross.bugtracker.repository.UserCredentialRepository;
+import com.ross.bugtracker.model.UserDetails;
+import com.ross.bugtracker.repository.UserDetailsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -20,7 +20,7 @@ import java.util.Optional;
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     @Autowired
-    private UserCredentialRepository userCredentialRepository;
+    private UserDetailsRepository userDetailsRepository;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -30,7 +30,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String userName = authentication.getName();
         String password = authentication.getCredentials().toString();
 
-        Optional<UserCredentials> user = userCredentialRepository.findById(userName);
+        Optional<UserDetails> user = userDetailsRepository.findById(userName);
         if (user.isPresent() && passwordEncoder.matches(password, user.get().getEncryptedPassword())) {
             return new UsernamePasswordAuthenticationToken(
                     userName, password, Arrays.asList(new SimpleGrantedAuthority(user.get().getRole().name()))
@@ -39,11 +39,11 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         throw new AuthenticationCredentialsNotFoundException("");
     }
 
-    public boolean register(String userName, String fullane, String password) {
-        if (!userCredentialRepository.findById(userName).isPresent()) {
+    public boolean register(String userName, String fullname, Role role, String password) {
+        if (!userDetailsRepository.findById(userName).isPresent()) {
             String encryptedPassword = passwordEncoder.encode(password);
 
-            userCredentialRepository.save(UserCredentials.builder().userName(userName).fullName(fullane).encryptedPassword(encryptedPassword).role(Role.DEFAULT).build());
+            userDetailsRepository.save(UserDetails.builder().userName(userName).fullName(fullname).encryptedPassword(encryptedPassword).role(role).build());
             return true;
         }
         return false;
