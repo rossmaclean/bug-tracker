@@ -14,7 +14,7 @@
                 <div class="card-body">
                     <form class="card-title" th:action="@{/delete_bug(bugId=${bug.id})}" method="post">
                         <h5 class="card-title" style="display: inline" th:text="${bug.title}"></h5>
-                        <button style="float: right;" class="btn" type="submit">
+                        <button th:if="${#request.isUserInRole('ROLE_DEVELOPER')}" style="float: right;" class="btn" type="submit">
                             <i class="far fa-trash-alt"></i>
                         </button>
                     </form>

@@ -22,7 +22,7 @@
 
             <span th:if="${!#request.isUserInRole('ROLE_DEVELOPER')}">
                 <p class="card-text font-weight-bold">Status</p>
-            <p class="card-text" th:text="${bug.status}"></p>
+                <p class="card-text" th:text="${bug.status}"></p>
             </span>
 
             <form th:if="${#request.isUserInRole('ROLE_DEVELOPER')}" method="post"
